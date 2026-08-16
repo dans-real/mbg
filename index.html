@@ -278,7 +278,7 @@
     document.getElementById('ringkasan').textContent = formatted;
 
     const pesan = encodeURIComponent(
-      "Halo! Aku terima ajakan nontonnya ya sayang 😊\nTanggal: " + formatted
+      "Halo! Aku terima ajakan nontonnya ya sayang😊\nTanggal: " + formatted
     );
     document.getElementById('waLink').href =
       "https://wa.me/" + NOMOR_WA + "?text=" + pesan;
@@ -301,6 +301,10 @@
 
   var musicBtn = document.getElementById('musicBtn');
   var isPlaying = false;
+
+  function updateMusicButton() {
+    musicBtn.textContent = isPlaying ? '⏸️ Pause musik' : '🔊 Putar musik';
+  }
 
   musicBtn.addEventListener('click', function () {
     if (isPlaying) {
