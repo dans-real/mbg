@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>mbg</title>
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: -apple-system, "Segoe UI", Roboto, sans-serif;
+  }
+  body {
+    background: linear-gradient(-45deg, #FF5FA2, #8C5CF7, #4FC3F7, #FFD23F);
+    background-size: 400% 400%;
+    animation: bgshift 14s ease infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem 1rem;
+  }
+  @keyframes bgshift {
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* ===== layar pembuka ===== */
+  .cover {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    background: rgba(0,0,0,0.25);
+    text-align: center;
+    padding: 1rem;
+  }
+  .cover p {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    text-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    margin: 0;
+  }
+  #openBtn {
+    font-size: 17px;
+    font-weight: 700;
+    padding: 16px 32px;
+    border-radius: 50px;
+    border: none;
+    background: #fff;
+    color: #222;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+  }
+
+  .stage {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    visibility: hidden;
+  }
+
+  .photo-scatter {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+    pointer-events: none;
+  }
+  .photo-slot {
+    position: absolute;
+    width: 100px;
+    aspect-ratio: 1/1;
+    border: 4px solid #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 4px 4px 0 rgba(0,0,0,0.25);
+  }
+  .photo-slot img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .s1 { top: -30px; left: -30px; transform: rotate(-8deg); }
+  .s2 { top: -30px; right: -30px; transform: rotate(7deg); }
+  .s3 { bottom: -30px; left: -30px; transform: rotate(5deg); }
+  .s4 { bottom: -30px; right: -30px; transform: rotate(-6deg); }
+  @media (max-width: 480px) {
+    .photo-slot { width: 70px; }
+    .s1 { top: -18px; left: -18px; }
+    .s2 { top: -18px; right: -18px; }
+    .s3 { bottom: -18px; left: -18px; }
+    .s4 { bottom: -18px; right: -18px; }
+  }
+
+  .card {
+    position: relative;
+    z-index: 3;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #e5e3da;
+    border-radius: 16px;
+    padding: 2.5rem 1.75rem;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+  .card p.question {
+    font-size: 18px;
+    margin: 0 0 2rem;
+    color: #222;
+  }
+  .btn-area {
+    position: relative;
+    height: 130px;
+  }
+  button {
+    position: absolute;
+    padding: 12px 24px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #fff;
+    font-size: 15px;
+    cursor: pointer;
+    transition: left 0.15s ease, top 0.15s ease;
+  }
+  #btnTerima {
+    left: calc(50% - 95px);
+    top: 45px;
+    width: 90px;
+    background: #222;
+    color: #fff;
+    border: none;
+  }
+  #btnTerima:hover { background: #000; }
+  #btnTolak {
+    left: calc(50% + 5px);
+    top: 45px;
+    width: 90px;
+  }
+  input[type="date"], input[type="time"] {
+    width: 100%;
+    max-width: 240px;
+    padding: 10px 12px;
+    margin: 8px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+  }
+  .err {
+    color: #c0392b;
+    font-size: 13px;
+    margin: 4px 0 0;
+    display: none;
+  }
+  #btnSubmit {
+    position: static;
+    margin-top: 16px;
+    width: 100%;
+    max-width: 240px;
+    background: #222;
+    color: #fff;
+    border: none;
+  }
+  #btnSubmit:hover { background: #000; }
+  .hidden { display: none; }
+  #step3 p.title { font-size: 18px; margin: 0 0 6px; }
+  #step3 p.sub { font-size: 14px; color: #666; margin: 0 0 20px; }
+  a.wa-btn {
+    display: inline-block;
+    background: #25D366;
+    color: #fff;
+    text-decoration: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 15px;
+  }
+
+  .music-row { margin-top: 1.5rem; }
+  #musicBtn {
+    position: static;
+    width: auto;
+    background: #C6F24E;
+    border: 1px solid #222;
+  }
+</style>
+</head>
+<body>
+
+<div class="cover" id="cover">
+  <button id="openBtn" type="button">Buka mbg</button>
+</div>
+
+<div class="stage" id="stage">
+
+  <div class="photo-scatter">
+    <div class="photo-slot s1"><img src="foto1.jpg" alt=""></div>
+    <div class="photo-slot s2"><img src="foto2.jpg" alt=""></div>
+    <div class="photo-slot s3"><img src="foto3.jpg" alt=""></div>
+    <div class="photo-slot s4"><img src="foto4.jpg" alt=""></div>
+  </div>
+
+  <div class="card">
+
+    <div id="step1">
+      <p class="question"></p>
+      <p class="question"></p>
+      <p class="question">Mau nggak nonton insidious bareng?</p>
+      <div class="btn-area">
+        <button id="btnTerima">Terima</button>
+        <button id="btnTolak">Tolak</button>
+      </div>
+    </div>
+
+    <div id="step2" class="hidden">
+      <p class="question">Pilih tanggal dan waktu nontonnya</p>
+      <input type="date" id="tanggal">
+      <br>
+      <input type="time" id="waktu">
+      <p class="err" id="errMsg">Isi tanggal dan waktu dulu ya</p>
+      <br>
+      <button id="btnSubmit">Konfirmasi</button>
+    </div>
+
+    <div id="step3" class="hidden">
+      <p class="title">Yeay, ditunggu ya!</p>
+      <p class="sub" id="ringkasan"></p>
+      <a href="#" id="waLink" class="wa-btn" target="_blank">Kirim konfirmasi via WhatsApp</a>
+    </div>
+
+    <div class="music-row">
+      <button id="musicBtn" type="button">⏸️ Pause musik</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // ==== GANTI nomor WhatsApp tujuan di sini (kode negara, tanpa + atau 0 di depan) ====
+  const NOMOR_WA = "6285934748017";
+
+  const btnTolak = document.getElementById('btnTolak');
+  const wrap = btnTolak.parentElement;
+
+  function dodge() {
+    const w = wrap.clientWidth, h = wrap.clientHeight;
+    const bw = btnTolak.offsetWidth, bh = btnTolak.offsetHeight;
+    const left = Math.random() * (w - bw);
+    const top = Math.random() * (h - bh);
+    btnTolak.style.left = left + 'px';
+    btnTolak.style.top = top + 'px';
+  }
+
+  btnTolak.addEventListener('mouseenter', dodge);
+  btnTolak.addEventListener('touchstart', function (e) {
+    e.preventDefault();
+    dodge();
+  }, { passive: false });
+
+  document.getElementById('btnTerima').addEventListener('click', function () {
+    document.getElementById('step1').classList.add('hidden');
+    document.getElementById('step2').classList.remove('hidden');
+  });
+
+  document.getElementById('btnSubmit').addEventListener('click', function () {
+    const tanggal = document.getElementById('tanggal').value;
+    const waktu = document.getElementById('waktu').value;
+    const err = document.getElementById('errMsg');
+
+    if (!tanggal || !waktu) {
+      err.style.display = 'block';
+      return;
+    }
+    err.style.display = 'none';
+
+    const d = new Date(tanggal + 'T' + waktu);
+    const formatted = d.toLocaleDateString('id-ID', {
+      weekday: 'long', day: 'numeric', month: 'long', year: 'numeric'
+    }) + ', pukul ' + waktu;
+
+    document.getElementById('ringkasan').textContent = formatted;
+
+    const pesan = encodeURIComponent(
+      "Halo! Aku terima ajakan nontonnya ya 😊\nTanggal: " + formatted
+    );
+    document.getElementById('waLink').href =
+      "https://wa.me/" + NOMOR_WA + "?text=" + pesan;
+
+    document.getElementById('step2').classList.add('hidden');
+    document.getElementById('step3').classList.remove('hidden');
+  });
+
+  document.getElementById('tanggal').addEventListener('input', function () {
+    document.getElementById('errMsg').style.display = 'none';
+  });
+  document.getElementById('waktu').addEventListener('input', function () {
+    document.getElementById('errMsg').style.display = 'none';
+  });
+
+  // ==== musik ====
+  var bgMusic = new Audio('musik.mp3');
+  bgMusic.loop = true;
+  bgMusic.preload = 'auto';
+
+  var musicBtn = document.getElementById('musicBtn');
+  var isPlaying = false;
+
+  function updateMusicButton() {
+    musicBtn.textContent = isPlaying ? '⏸️ Pause musik' : '🔊 Putar musik';
+  }
+
+  musicBtn.addEventListener('click', function () {
+    if (isPlaying) {
+      bgMusic.pause();
+      isPlaying = false;
+    } else {
+      bgMusic.play();
+      isPlaying = true;
+    }
+    updateMusicButton();
+  });
+
+  // ==== tombol buka undangan: klik ini sah sebagai interaksi pengguna ====
+  document.getElementById('openBtn').addEventListener('click', function () {
+    bgMusic.play().then(function () {
+      isPlaying = true;
+      updateMusicButton();
+    }).catch(function () {
+      isPlaying = false;
+      updateMusicButton();
+    });
+
+    document.getElementById('cover').style.display = 'none';
+    var stage = document.getElementById('stage');
+    stage.style.visibility = 'visible';
+  });
+</script>
+
+</body>
+</html>
