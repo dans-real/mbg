@@ -229,11 +229,6 @@
       <p class="sub" id="ringkasan"></p>
       <a href="#" id="waLink" class="wa-btn" target="_blank">Kirim konfirmasi via WhatsApp</a>
     </div>
-
-    <div class="music-row">
-      <button id="musicBtn" type="button">⏸️ Pause musik</button>
-    </div>
-
   </div>
 </div>
 
@@ -283,7 +278,7 @@
     document.getElementById('ringkasan').textContent = formatted;
 
     const pesan = encodeURIComponent(
-      "Halo! Aku terima ajakan nontonnya ya 😊\nTanggal: " + formatted
+      "Halo! Aku terima ajakan nontonnya ya sayang 😊\nTanggal: " + formatted
     );
     document.getElementById('waLink').href =
       "https://wa.me/" + NOMOR_WA + "?text=" + pesan;
@@ -306,10 +301,6 @@
 
   var musicBtn = document.getElementById('musicBtn');
   var isPlaying = false;
-
-  function updateMusicButton() {
-    musicBtn.textContent = isPlaying ? '⏸️ Pause musik' : '🔊 Putar musik';
-  }
 
   musicBtn.addEventListener('click', function () {
     if (isPlaying) {
