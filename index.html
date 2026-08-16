@@ -178,13 +178,6 @@
     font-size: 15px;
   }
 
-  .music-row { margin-top: 1.5rem; }
-  #musicBtn {
-    position: static;
-    width: auto;
-    background: #C6F24E;
-    border: 1px solid #222;
-  }
 </style>
 </head>
 <body>
@@ -229,11 +222,6 @@
       <p class="sub" id="ringkasan"></p>
       <a href="#" id="waLink" class="wa-btn" target="_blank">Kirim konfirmasi via WhatsApp</a>
     </div>
-
-    <div class="music-row">
-      <button id="musicBtn" type="button"></button>
-    </div>
-
   </div>
 </div>
 
@@ -299,43 +287,21 @@
     document.getElementById('errMsg').style.display = 'none';
   });
 
-  // ==== musik ====
-  var bgMusic = new Audio('musik.mp3');
-  bgMusic.loop = true;
-  bgMusic.preload = 'auto';
+// ==== musik ====
+var bgMusic = new Audio('musik.mp3');
+bgMusic.loop = true;
+bgMusic.preload = 'auto';
 
-  var musicBtn = document.getElementById('musicBtn');
-  var isPlaying = false;
-
-  function updateMusicButton() {
-    musicBtn.textContent = isPlaying ? '⏸️ Pause musik' : '🔊 Putar musik';
-  }
-
-  musicBtn.addEventListener('click', function () {
-    if (isPlaying) {
-      bgMusic.pause();
-      isPlaying = false;
-    } else {
-      bgMusic.play();
-      isPlaying = true;
-    }
-    updateMusicButton();
+// ==== tombol buka undangan: klik ini sah sebagai interaksi pengguna ====
+document.getElementById('openBtn').addEventListener('click', function () {
+  bgMusic.play().catch(function () {
+    // kalau tetap gagal diputar, dibiarkan senyap tanpa kontrol
   });
 
-  // ==== tombol buka undangan: klik ini sah sebagai interaksi pengguna ====
-  document.getElementById('openBtn').addEventListener('click', function () {
-    bgMusic.play().then(function () {
-      isPlaying = true;
-      updateMusicButton();
-    }).catch(function () {
-      isPlaying = false;
-      updateMusicButton();
-    });
-
-    document.getElementById('cover').style.display = 'none';
-    var stage = document.getElementById('stage');
-    stage.style.visibility = 'visible';
-  });
+  document.getElementById('cover').style.display = 'none';
+  var stage = document.getElementById('stage');
+  stage.style.visibility = 'visible';
+});
 </script>
 
 </body>
